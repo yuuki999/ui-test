@@ -2,12 +2,46 @@
 
 トピック
 
-
 ## tailwind調査
 
 予め用意されたクラスを使用していい感じにデザインを作成してくれる。  
 導入するならtailwind用のprettierもあるので合わせてインストールしておきたい。
 prettier-plugin-tailwindcss
+
+prettier-plugin-tailwindcssセットアップ
+
+```
+install -D prettier prettier-plugin-tailwindcss
+```
+
+ルートディレクトリに.prettierrcを作成して下記を配置
+
+```
+{
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
+```
+
+.prettierignoreをルートディレクトリに作成してprettierのフォーマットを無視したいファイルを作成する。
+
+```
+node_modules
+build
+.next
+```
+
+下記で全てのファイルにprettierを設定することもできる。
+
+```
+prettier --write .
+```
+
+なのでpackage.jsonに下記のように追加すると便利かも
+{
+"scripts": {
+"format": "prettier --write ."
+}
+}
 
 ## reactヘッドレスUIライブラリを調査
 
@@ -27,15 +61,15 @@ githubスター的にはRadixUIとHeadless UIが大手
 依存性があるので、大規模、長期運用を想定するならヘッドレスUI + CSSライブラリの方がいいかも
 
 - Material-UI（MUI）  
-https://mui.com/material-ui/getting-started/templates/dashboard/
-すごく好き
+  https://mui.com/material-ui/getting-started/templates/dashboard/
+  すごく好き
 - Ant Design（AntD）
-https://preview.pro.ant.design/dashboard/analysis MUIの方が好きかも
+  https://preview.pro.ant.design/dashboard/analysis MUIの方が好きかも
 - React Bootstrap
 - Chakra UI  
-MUIを筆頭の他のライブラリと比べるとシンプルな設計、実装が可能そう。  
-Chakra UIはCSS-in-JSを使用しているため、実行時のパフォーマンスが他の手法を用いたライブラリと比べてやや劣る可能性があります。そのため、主に小規模から中規模のアプリケーション向けに適しています  
-https://v2.chakra-ui.com/getting-started/comparison#the-runtime-trade-off-%EF%B8%8F  
+  MUIを筆頭の他のライブラリと比べるとシンプルな設計、実装が可能そう。  
+  Chakra UIはCSS-in-JSを使用しているため、実行時のパフォーマンスが他の手法を用いたライブラリと比べてやや劣る可能性があります。そのため、主に小規模から中規模のアプリケーション向けに適しています  
+  https://v2.chakra-ui.com/getting-started/comparison#the-runtime-trade-off-%EF%B8%8F
 
 - Next UI
 
@@ -56,27 +90,29 @@ ariaはコンポジション設計となっている。
 この方法では、各コンポーネントは特定の責任を持ち、それらを組み合わせることで柔軟性と再利用性の高いシステムを作ることができます。
 
 ```tsx
-import React from 'react';
-import { useButton } from '@react-aria/button';
-import { useToggleState } from '@react-stately/toggle';
+import React from "react";
+import { useButton } from "@react-aria/button";
+import { useToggleState } from "@react-stately/toggle";
 
 // 基本的なボタンコンポーネント
 function Button(props) {
   let ref = React.useRef();
   let { buttonProps } = useButton(props, ref);
-  return <button {...buttonProps} ref={ref}>{props.children}</button>;
+  return (
+    <button {...buttonProps} ref={ref}>
+      {props.children}
+    </button>
+  );
 }
 
 // トグル機能を持つボタンコンポーネント
 function ToggleButton(props) {
   let state = useToggleState(props);
   return (
-    <Button
-      {...props}
-      isPressed={state.isSelected}
-      onPress={state.toggle}
-    >
-      {typeof props.children === 'function' ? props.children(state.isSelected) : props.children}
+    <Button {...props} isPressed={state.isSelected} onPress={state.toggle}>
+      {typeof props.children === "function"
+        ? props.children(state.isSelected)
+        : props.children}
     </Button>
   );
 }
@@ -84,9 +120,7 @@ function ToggleButton(props) {
 // 使用例
 function App() {
   return (
-    <ToggleButton>
-      {isSelected => isSelected ? 'ON' : 'OFF'}
-    </ToggleButton>
+    <ToggleButton>{(isSelected) => (isSelected ? "ON" : "OFF")}</ToggleButton>
   );
 }
 ```
@@ -94,16 +128,19 @@ function App() {
 他にどんな設計があるか？
 
 1. 継承ベースの設計：
+
    - クラスベースのコンポーネントで、親クラスの機能を継承して拡張します。
    - 例：`class ToggleButton extends Button { ... }`
    - 欠点：柔軟性が低く、深い継承階層が生まれやすい。
 
 2. HOC（Higher-Order Components）：
+
    - コンポーネントを受け取り、新しい機能を追加したコンポーネントを返す関数。
    - 例：`const withToggle = (WrappedComponent) => { ... }`
    - 欠点：複数のHOCを組み合わせると、デバッグが難しくなる場合がある。
 
 3. Render Props：
+
    - 関数をプロップとして渡し、その関数内でコンポーネントをレンダリングする方法。
    - 例：`<Toggle>{(isOn) => <Button isPressed={isOn} />}</Toggle>`
    - 欠点：ネストが深くなると可読性が低下する場合がある。
@@ -118,6 +155,4 @@ https://azukiazusa.dev/blog/react-aria-accessible-component/
 
 ## コンポーネント設計
 
-
 ## storybook
-
