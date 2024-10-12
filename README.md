@@ -56,7 +56,12 @@ pnpm pkg set scripts.prepare="husky"
 pnpm run prepare
 ```
 
-pre-commitフックの追加、.husky/_/pre-commitファイルに下記を追加。
+package.jsonに追加
+```
+"lint-staged": "lint-staged --allow-empty"
+```
+
+pre-commitフックの追加、.husky/pre-commitファイルに下記を追加。
 ```
 #!/usr/bin/env sh
 . "$(dirname "$0")/h"
