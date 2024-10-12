@@ -43,6 +43,43 @@ prettier --write .
 }
 }
 
+
+pre-commitを使うとgit commitするときに自動整形してくれる。
+```
+install --save-dev prettier lint-staged husky
+```
+
+huskyインストール、セットアップ
+```
+install husky --save-dev
+pnpm pkg set scripts.prepare="husky"
+pnpm run prepare
+```
+
+pre-commitフックの追加、.husky/_/pre-commitファイルに下記を追加。
+```
+#!/usr/bin/env sh
+. "$(dirname "$0")/h"
+
+pnpm lint-staged
+```
+
+lint-stagedの設定、ルートディレクりに.lintstagedrc.jsを作成して下記を追加。
+```
+module.exports = {
+  "*.{js,jsx,ts,tsx,css,md,html,json}": "prettier --write",
+}
+```
+
+gitのフックには下記アクションがあり、  
+pre-commit: コミットをする前に実行されるスクリプト。コードの整形や lint などに使われます。  
+commit-msg: コミットメッセージのチェックに使用され、フォーマットが正しいかどうかなどを検証します。  
+pre-push: リモートにプッシュする前に実行されるスクリプト。テストやビルドの成功を確認するのに使用されます。  
+
+pre-commitでprettierを実行したり、  
+pre-pushでビルドが通るかチェックしてからpushしたりと調節ができる。
+
+
 ## reactヘッドレスUIライブラリを調査
 
 CSSを独自に当てられる。CSS資産が多い場合は選択肢になってくる。
