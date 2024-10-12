@@ -58,9 +58,7 @@ function CustomFileTrigger() {
           <ul>
             {selectedFiles.map((fileName, index) => (
               <li key={index}>{fileName}</li>
-            ))}
-          </ul>
-        </div>
+            ))}</ul></div>
       )}
     </div>
   );
